@@ -1,4 +1,4 @@
-package com.test.junittest;
+package com.test.junittest.domain;
 
 
 import lombok.Data;
@@ -8,6 +8,7 @@ public class Study {
 
   private int limit;
   private String name;
+  private Member owner;
 
   public Study(int limit, String name) {
     this.limit = limit;
