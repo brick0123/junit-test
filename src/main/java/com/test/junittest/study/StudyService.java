@@ -25,7 +25,9 @@ public class StudyService {
         member.orElseThrow(
             () -> new IllegalArgumentException("Member doesn't exist for Id: " + memberId))
     );
-
-    return repository.save(study);
+    Study saveStudy = repository.save(study);
+    memberService.notify(saveStudy);
+    memberService.notify(member.get());
+    return saveStudy;
   }
 }
