@@ -4,6 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.never;
@@ -16,6 +18,8 @@ import com.test.junittest.domain.Study;
 import com.test.junittest.member.MemberService;
 import java.util.Optional;
 import javax.persistence.EntityNotFoundException;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InOrder;
@@ -111,6 +115,10 @@ class StudyServiceTest {
     when(memberService.findById(1L)).thenReturn(Optional.of(member));
     when(studyRepository.save(study)).thenReturn(study);
 
+    // bdd 스타일
+    given(memberService.findById(1L)).willReturn(Optional.of(member));
+    given(studyRepository.save(study)).willReturn(study);
+
     studyService.createNewStudy(1L, study);
 
     assertThat(study.getOwner()).isEqualTo(member);
@@ -120,7 +128,7 @@ class StudyServiceTest {
 
     verify(memberService, never()).validate(any());
 
-
+    then(memberService).should(times(1)).notify(study);
 
     InOrder inOrder = inOrder(memberService);
     inOrder.verify(memberService).notify(study);
